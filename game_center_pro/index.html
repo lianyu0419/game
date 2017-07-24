@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>风行游戏</title>
+    <meta charset="UTF-8"/>
+	<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width">
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+    <link rel="stylesheet" type="text/css" href='css/share.css?v=20160802'>
+    <link rel="stylesheet" type="text/css" href='css/game.css?v=20160816'>
+	<link rel="dns-prefetch" href="img.funshion.com" /> 
+</head>
+<body>
+	<!--<div id="navigation" class="head">
+    	<div id="applications" title="applications" class="child">应用</div>
+		<div id="games" title="games"  class="child">游戏</div>
+		<div id="classifications" title="classifications"  class="child">分类</div>
+		<div id="ranking" title="ranking"  class="child">排行</div>
+		<div id="search" title="search"  class="child">搜索</div>
+	</div>  -->
+    <!-- 应用页 -->
+	<script type="text/template" id="app-template">
+		<div class="head">
+    		<div id="header_title" class="header_title"><div name="go_classification" class="last">返回</div>应用</div>
+		</div>
+		<div class="content" style='-webkit-user-select:none; user-select:none'>
+			<ul id="app_list_view" class="list_view"  style="margin-top:-6px">
+			</ul>
+		</div>
+	</script>
+	<!-- 游戏页 -->
+	<script type="text/template" id="game-template">
+		<div class="content" style="margin-top:-36px;-webkit-user-select:none; user-select:none">
+			<div id ="slide_content" class="content">
+				<div title="search" class="search_img"></div>
+				<div class="m-carousel m-fluid m-carousel-photos">
+					<!-- the slider -->
+				  	<div id="slides" class="m-carousel-inner slide">
+				  	</div>
+			  	</div>
+			  	<!-- the controls -->
+			  	<div id="slides_controls" class="m-carousel-controls m-carousel-bulleted">
+			  	</div>
+			</div>
+			<ul id="menu_list" class="menu_list clear">
+				<li class="menu"><div class="menu_content" title="classifications"><div title="classifications" class="menu_position classification_img menu_item_position"></div><div title="classifications" class="menu_title">游戏分类</div></div></li>
+				<li class="menu"><div class="menu_content" title="ranking"><div title="ranking" class="menu_position ranking_img menu_item_position"></div><div title="ranking" class="menu_title">游戏排行</div></div></li>
+				<li class="menu"><div class="menu_content" title="person"><div title="person" class="menu_position person_img menu_item_position"></div><div title="person" class="menu_title">个人中心</div></div></li>
+				<li class='menu'><div class='menu_content' title='manage'><div title='manage' class='menu_position manage_img menu_item_position'></div><div title='manage' class='menu_title'>下载中心</div></div></li>
+			</ul>
+			<ul id="game_list_view" class="list_view" style="margin-top:0px;">
+			</ul>
+		</div>
+	</script>
+	<!-- 排行页 -->
+	<script type="text/template" id="ranking-template">
+		<div class="head">
+    		<div id="header_title" class="header_title"><div name="go_classification" class="last">返回</div>游戏排行</div>
+		</div>
+		<div class="content" style='-webkit-user-select:none; user-select:none'>
+			<div id="searching" class="search_label_area" style="margin-top:160px;display:none;">
+				<div class='search_loading_img'></div>
+				<div class="title_font loading_title" style="margin-top: 36px;">努力加载中</div>
+			</div>
+    		<ul id="list_view" class="list_view" style="margin-top:10px;">
+    		</ul>
+    	</div>
+	</script>
+    <!-- 分类页 -->
+    <script type="text/template" id="classification-template">
+    	<div class="head">
+    		<div id="header_title" class="header_title"><div name="go_classification" class="last">返回</div>游戏分类</div>
+		</div>
+		<div class="content" style='-webkit-user-select:none; user-select:none'>
+			<div id ="slide_content" class="content">
+	        	  <div class="m-carousel m-fluid m-carousel-photos">
+					  <!-- the slider -->
+					  <div id="slides" class="m-carousel-inner slide">
+			          </div>
+			      </div>
+				  <!-- the controls -->
+				  <div id="slides_controls" class="m-carousel-controls m-carousel-bulleted">
+				  </div>
+			</div>
+			<div class="categories" >
+        		<ul id="category_list_view" class="list_view">
+        		</ul>
+        	</div>
+			<div id="end_funshion" style="margin-top:10px;">
+			</div>
+		</div>
+    </script>
+    <!-- 搜索页 -->
+	<script type="text/template" id="search-template">
+		<div class="head">
+    		<div id="header_title" class="header_title"><div name="go_classification" class="last">返回</div>搜索</div>
+		</div>
+		<div class="content">
+	        <div class="search_div">
+	            <span class="search_title">搜索：</span>
+				<div class="search_content">
+					<input type="text" id="search_content" class="text_content" style="color:#d0d0d0"
+						autocomplete="off" value="  输入感兴趣的关键字试试"
+						onfocus="javascript:if(this.value.trim() == '输入感兴趣的关键字试试') this.value = ''; this.style.color='#000';this.focus();"
+						onblur="if(this.value == '') {this.value = '  输入感兴趣的关键字试试'; this.style.color = '#d0d0d0';}">
+				</div>
+				<div id="quickdelete" class="quickdelete" onclick="quickDelete()" title="清空"></div>
+	            <div class="search_button"></div>
+			</div>
+			<div id="searching" class="search_label_area" style="margin-top:160px;display:none;">
+				<div class='search_loading_img'></div>
+				<div class="title_font loading_title" style="margin-top: 36px;">努力搜索中</div>
+			</div>
+			<div id="search_label_area" class="search_label_area">
+				<div id="no_search_img" class="no_search_img" style="display:none"></div>
+				<div id="search_label_area_title" class="title_font"></div>
+				<div class="search_label_list">
+		        	<ul id="search_label_list">
+		        	</ul>
+		       </div>
+	        </div>
+	        <ul id="list_view" class="list_view">
+	        </ul>
+		</div>
+	</script>
+	<!-- 子分类页 -->
+	<script type="text/template" id="subClassification-template">
+		<div class="head">
+        	<div id="header_title" class="header_title"><div name="go_classification" class="last">返回</div>&nbsp</div>
+		</div>
+		<div class="content" style='-webkit-user-select:none; user-select:none'>
+        	<ul id="list_view" class="list_view">
+        	</ul>
+        </div>
+	</script>
+	<!-- 详情页 -->
+	<script type="text/template" id="detail-template">
+       <div class="detail-content" style='margin-top:0px;-webkit-user-select:none; user-select:none'>
+       		<div name='go_back' class="detail_last">返回</div>
+			<div class="detail_info" style="padding:0px;margin:0px;">
+       		</div>
+			<div id="gift_list" class="detail view_gift_list" style="display:none">
+				<div class="title_font">福利礼包</div>
+				<ul id="gift_info" class="clear">
+				</ul>
+			</div>
+			<div id="app_activity" class="detail view_app_activity" style="display:none">
+				<div id="app_activity_title" class="title_font"><div class="detail_mark"></div>游戏活动</div>
+			</div>
+			<div class="detail" style="padding-bottom:0px">
+				<div class="title_font">游戏介绍</div>
+				<div class="row">
+					<div id="screenShotsUrl">
+					</div>
+				</div>
+			</div>
+       		<div class="detail">
+       			<div class="title_font">游戏信息</div>
+            	<div class="detail_content_positon">
+                	<ul id="gameInfo">
+                	</ul>
+            	</div>
+       		</div>
+       		<div>
+            	<div class="detail">
+            		<div class="title_font">
+						<div class="content_flex"><div id="flex" class="triangle-down"></div></div>游戏简介
+					</div>
+					<div id="detail_introduction" class="detail_content_positon">
+						<pre id="description"><pre id="description_show" ></pre><pre id="description_hide" style="display:none"></pre></pre>
+					</div>
+            	</div>
+           </div>
+           <div class="detail">
+           		<div class="title_font">游戏标签</div>
+				<div class="detail_content_positon">
+					<ul class="label_list clear">
+					</ul>
+				</div>
+           </div>
+           <div style="padding-bottom:71px;">
+            	<div class="detail">
+                	<div class="title_font">小编力荐</div>
+                	<ul id="recommend_info" class="recommend_list clear">
+                	</ul>
+               </div>
+           </div>
+           <div class="bottom_button"></div>
+       </div>
+	</script>
+    <!--错误页-->
+    <script type="text/template" id="error-template">
+        <div class="head">
+        	<div id="header_title" class="header_title"><div name="go_classification" class="last">返回</div>升级中</div>
+		</div>
+        <div class="content error_body" style='-webkit-user-select:none; user-select:none'>
+            <div class="error_content_position">
+                <div class="error_content">
+                    <div class="error_content_img" ></div>
+                    <p class="error_font">网络异常,请稍后再试...</p>
+                    <div class="error_font return_home" style="color:#f86400;text-decoration:underline;">返回首页</div>
+                </div>
+            </div>
+        </div>
+    </script>
+    <!--用户反馈页-->
+    <script type="text/template" id="feedback-template">
+    	<div class="head">
+	       <div id="header_title" class="header_title"><div name="go_classification" class="last">返回</div>问题反馈</div>
+		</div>
+		<div class="content">
+			<div class="problem_description">
+				<div class="problem_title"><span class="promblem_mark">*</span> 内容描述</div>
+				<div class="problem_content">
+					<textarea class="problem_text" name="problem_text" id="problem_text" style="color:#d0d0d0" onfocus="javascript:if(this.value.trim()=='请输入内容') {this.value='';}this.style.color='#000';this.focus();" onblur="if(this.value.trim()=='') {this.value='  请输入内容';this.style.color='#d0d0d0';}">请输入内容</textarea>				
+				</div>
+	       	</div>
+	       	<div class="contact_information">
+	       		<div class="problem_title"><span class="promblem_mark">*</span> 联系方式</div>
+	       		<div class="problem_content">
+					<input type="text" class="phone_num text_content" name="phone_num" id="phone_num" style="color:#d0d0d0" autocomplete="off" value="  手机/qq/微信" onfocus="javascript:if(this.value.trim() == '手机/qq/微信') this.value = ''; this.style.color='#000';this.focus();" onblur="if(this.value.trim() == '') {this.value = '  手机/qq/微信'; this.style.color = '#d0d0d0';}">
+					</input>
+				</div>
+	       	</div>
+			<div class="contact_information">
+				<button type="button" id="submit" class="submit_button">提交</button>
+			</div>
+		</div>
+    </script>
+    <!--用户积分页-->
+    <script type="text/template" id="credit-template">
+    	<div class="head">
+	       <div id="header_title" class="header_title"><div name="go_classification" class="last">返回</div>我的金币</div>
+		</div>
+		<div class="content" style='-webkit-user-select:none; user-select:none'>
+			<div class="credit_show">
+				<div class="rule">金币规则</div>
+				<div class="credit_show_img"></div>
+				<div class="credit_content clear""><div class="credit_font">金币：</div><div id="total_credit" class="total_credit"></div></div>
+				<div class="add_credit"><button class="download_button add_credit_button">赚取金币</button></div>
+				<div class="record_title">金币记录</div>
+			</div>
+			<div class="record_show">
+				<ul id="list_view"" class="record_list">
+				</ul>
+			</div>
+		</div>
+    </script>
+     <!--规则页-->
+    <script type="text/template" id="rule-template">
+    	<div class="head">
+	       <div id="header_title" class="header_title"><div name="go_classification" class="last">返回</div>&nbsp</div>
+		</div>
+		<div id="rule_list" class="content" style='-webkit-user-select:none; user-select:none'>
+		</div>
+    </script>
+	<!-- 我的游戏页 -->
+	<script type="text/template" id="my_game-template">
+		<div class="head">
+        	<div id="header_title" class="header_title"><div name="go_classification" class="last">返回</div>&nbsp</div>
+		</div>
+		<div class="content" style='-webkit-user-select:none; user-select:none'>
+			<ul id="installed_app_list" class="installed_app_ul clear">
+			</ul>
+        	<ul id="list_view" class="list_view">
+        	</ul>
+        </div>
+	</script>
+	<!-- 游戏礼包页 -->
+	<script type="text/template" id="gift_list-template">
+		<div class="head">
+        	<div id="header_title" class="header_title"><div name='go_back' class="last">返回</div>游戏礼包</div>
+		</div>
+		<div class="content">
+			<div class="credit_show">
+				<div class="rule">礼包规则</div>
+				<div class="download_button my_gift_button">查看我的礼包</div>
+			</div>
+			<ul id="gift_list_view" class="list_view" style="margin:104px 0px 10px 0px;">
+			</ul>
+        </div>
+	</script>
+	<!-- 活动页 -->
+	<script type="text/template" id="activity-template">
+		<div class="head">
+        	<div id="header_title" class="header_title"><div name='go_back' class="last">返回</div>活动中心</div>
+		</div>
+		<div class="content clear" style="background:#fff;height:100%;position:relative;padding:10px 5px 0px 5px;-webkit-user-select:none; user-select:none">
+				<ul id="activity_list_view" class="list_view" style="margin:0px 0px 60px 0px;background:#fff">
+					<li class="activity_li" title="add_credit"><div class="activity_area" title="add_credit"><div title="add_credit" class="activity_default_img"><img title="add_credit" class="activity_item" src="img/activity_credit.png" onerror="this.src='img/activity_nofound.png'" onload="loadedImg('activity_default_img')"></div>赚取金币</div></li>
+					<li class="activity_li" title="gift_list"><div class="activity_area" title="gift_list"><div title="gift_list" class="activity_default_img"><img title="gift_list" class="activity_item" src="img/activity_gift.png" onerror="this.src='img/activity_nofound.png'" onload="loadedImg('activity_default_img')"></div>领取礼包</div></li>
+					<li class="activity_li" title="topic_list"><div class="activity_area" title="topic_list"><div title="topic_list" class="activity_default_img"><img title="topic_list"  class="activity_item" src="img/activity_topic.png" onerror="this.src='img/activity_nofound.png'" onload="loadedImg('activity_default_img')"></div>专题活动</div></li>
+				</ul>
+			<div class='end_title' style="position:fixed;left:0px;right:0px;bottom:0px;"><div class='end_image'></div></div>
+        </div>
+	</script>
+	<!--详情页礼包列表-->
+    <script type="text/template" id="detail_gift-template">
+        <div class="detail_head">
+        	<div name='go_back' class="last">返回</div>
+        	<div id="game_title" class="return">&nbsp</div>
+		</div>
+        <div class="detail-content clear" style="margin-bottom:61px;">
+			<div class="detail_info" style="padding:0px;margin:0px;">
+       		</div>
+			<ul id="gift_list_view" class="list_view clear" style="margin:10px 0px 10px 0px;">
+			</ul>
+		</div>
+		<div class="bottom_button"></div>
+    </script>
+	<!--用户奖品页-->
+    <script type="text/template" id="prize-template">
+    	<div class="head">
+	       <div id="header_title" class="header_title"><div name="go_back" class="last">返回</div>我的礼包</div>
+		</div>
+		<div class="content">
+			<div class="gift_show">
+				<div class="rule">礼包规则</div>
+				<div class="gift_show_img"></div>
+				<div class="credit_content clear"><div class="credit_font">礼包：</div><div id="total_gift" class="total_credit"></div></div>
+				<div class="add_gift"><button class="download_button add_gift_button">进入活动,获取礼包</button></div>
+				<div class="record_title">礼包记录</div>
+			</div>
+			<div class="record_show" style="margin-top:-10px;">
+				<div class="empty_prize_area error_font" style="display:none"><div class="empty_prize_img"></div><p>暂无游戏礼包哦</p></div>
+				<ul id="gift_list_view" class="list_view">
+				</ul>
+			</div>
+		</div>
+    </script>
+    <!-- 专题列表页 -->
+    <script type="text/template" id="topic_list-template">
+    	<div class="head">
+	       <div id="header_title" class="header_title"><div name="go_back" class="last">返回</div>专题列表</div>
+		</div>
+		<div class="content" style='-webkit-user-select:none; user-select:none'>
+        	<ul id="topic_list" class="list_view" style="margin-top:0px">
+        	</ul>
+		</div>
+    </script>
+    <!-- 专题内容页 -->
+    <script type="text/template" id="topic-template">
+    	<div class="head">
+	       <div id="header_title" class="header_title"><div name="go_back" class="last">返回</div>&nbsp</div>
+		</div>
+		<div class="content clear">
+			<div id="topic_info"></div>
+        	<ul id="topic_app_list" class="list_view">
+        	</ul>
+		</div>
+    </script>
+     <!-- 游戏活动内容页 -->
+    <script type="text/template" id="app_activity-template">
+    	<div class="head">
+	       <div id="header_title" class="header_title"><div name="go_back" class="last">返回</div>&nbsp</div>
+		</div>
+		<div class="content clear">
+			<div id="topic_info"></div>	
+		</div>
+		<div class="bottom_button"></div>
+    </script>
+    <!--个人中心页-->
+	<script type="text/template" id="person-template">
+		<div class="head">
+        	<div id="header_title" class="header_title"><div name='go_back' class="last">返回</div>个人中心</div>
+		</div>
+		<div class="content clear" style="background:#eee;position:fixed;top:0px;bottom:0px;right:0px;left:0px;-webkit-user-select:none; user-select:none">
+			<ul id="activity_list_view" class="list_view" >
+				<li class="person_menu"><div class="menu_content" title="credit"><div title="credit" class="menu_position credit_img menu_position"></div><div title="credit" class="menu_title">金币</div></div><div class="split_line"></div></li>
+				<li class="person_menu"><div class="menu_content" title="gift_list"><div title="gift_list" class="menu_position gift_img menu_position"></div><div title="gift_list" class="menu_title">礼包</div></div></li>
+				<li class="person_menu"><div class="menu_content" title="activity"><div title="activity" class="menu_position activity_img menu_position"></div><div title="activity" class="menu_title">活动</div><div class="split_line"></div></div></li>
+				<li class="person_menu"><div class="menu_content" title="feedback"><div title="feedback" class="menu_position feedback_img menu_position"></div><div title="feedback" class="menu_title">反馈</div></div></li>
+			</ul>
+        </div>
+	</script>
+    <!-- 公共库 集成了zepto.min.js、backbone.js、underscorce.js、backbone-localstorage.js、carousel.js-->
+    <script type="text/javascript" src='javascripts/backbone/myBackbone.js'></script>
+	<!--应用库-->
+    <script type="text/javascript" src="javascripts/iscroll.js?v=20160810"></script>
+	<script type="text/javascript" src="javascripts/utils.js?v=20161014"></script>
+	<script type="text/javascript" src="javascripts/share.js?v=20161014"></script>
+	<script type="text/javascript">
+	    var href_items = window.location.href.split("#"); 
+		var head_name = "games";
+	    if (href_items.length == 1){
+	    	changeHead(head_name);
+	    }else{
+	    	head_name = href_items[1].split("/")[0];
+	    	changeHead(head_name);
+	    }
+		$(".child").on("tap", function() {
+			changeContent(this.id)
+		});
+		current_native_id = head_name; 
+        function detailBigDetailImgs(){
+            $("#big_detail_imgs").remove();
+		}
+	</script>
+</body>
+</html>
